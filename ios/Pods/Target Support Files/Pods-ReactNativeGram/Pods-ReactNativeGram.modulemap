@@ -1,0 +1,6 @@
+module Pods_ReactNativeGram {
+  umbrella header "Pods-ReactNativeGram-umbrella.h"
+
+  export *
+  module * { export * }
+}
