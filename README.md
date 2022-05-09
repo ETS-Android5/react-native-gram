@@ -22,11 +22,15 @@ npx react-native start
 
 ### On a new terminal, run the application
 
-```bash
-# run app on ios
-npx react-native run-ios
+Run app on ios
 
-# run app on android
+```bash
+npx react-native run-ios
+```
+
+Run app on android
+
+```bash
 npx react-native run-android
 ```
 

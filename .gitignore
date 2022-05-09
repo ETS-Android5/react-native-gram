@@ -62,6 +62,7 @@ buck-out
 .gradle
 local.properties
 *.iml
+/android/app/build/
 
 # Node
 node_modules
@@ -98,8 +99,8 @@ package-lock.json
 /template/vendor
 
 # iOS / CocoaPods
-/template/ios/build/
-/template/ios/Pods/
+/ios/build/
+/ios/Pods/
 /template/ios/Podfile.lock
 /packages/rn-tester/Gemfile.lock
 
