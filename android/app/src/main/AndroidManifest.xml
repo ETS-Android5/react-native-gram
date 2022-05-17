@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.reactnativegram">
+  package="com.rngram">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
