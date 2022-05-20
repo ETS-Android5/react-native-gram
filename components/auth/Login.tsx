@@ -1,21 +1,18 @@
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { getApps } from 'firebase/app';
 import React, { Component } from 'react';
 import { View, Button, TextInput } from 'react-native';
 
-interface IRegisterProps {}
+interface ILoginProps {}
 
-interface IRegisterState {
+interface ILoginState {
   email: string;
   password: string;
   name: string;
 }
 
-export default class Register extends Component<
-  IRegisterProps,
-  IRegisterState
-> {
-  constructor(props: IRegisterProps) {
+export default class Login extends Component<ILoginProps, ILoginState> {
+  constructor(props: ILoginProps) {
     super(props);
 
     this.state = {
@@ -24,14 +21,14 @@ export default class Register extends Component<
       name: '',
     };
 
-    this.onSignUp = this.onSignUp.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
   }
 
-  async onSignUp() {
-    const { email, password, name } = this.state;
+  async onSignIn() {
+    const { email, password } = this.state;
     const auth = getAuth();
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password,
@@ -61,7 +58,7 @@ export default class Register extends Component<
           secureTextEntry={true}
           onChangeText={password => this.setState({ password })}
         />
-        <Button onPress={() => this.onSignUp()} title="Sign Up" />
+        <Button onPress={() => this.onSignIn()} title="Sign In" />
       </View>
     );
   }
