@@ -1,28 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
+import { getApps, initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Landing from './components/auth/Landing';
+import Register from './components/auth/Register';
+
+import { API_KEY, PROJECT_ID, SENDER_ID, APP_ID, MEASUREMENT_ID } from '@env';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -30,37 +17,81 @@ export type RootStackParamList = {
   Login: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+interface IAppProps {}
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen
-          name="Landing"
-          component={Landing}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+interface IAppState {
+  loaded: boolean;
+  loggedIn: boolean;
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const firebaseConfig = {
+  apiKey: API_KEY,
+  authDomain: `${PROJECT_ID}.firebaseapp.com`,
+  projectId: PROJECT_ID,
+  storageBucket: `${PROJECT_ID}.appspot.com`,
+  messagingSenderId: SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
+};
+
+if (getApps().length < 1) {
+  initializeApp(firebaseConfig);
+}
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+export default class App extends Component<IAppProps, IAppState> {
+  constructor(props: IAppProps) {
+    super(props);
+
+    this.state = {
+      loaded: false,
+      loggedIn: false,
+    };
+  }
+
+  componentDidMount() {
+    onAuthStateChanged(getAuth(), user => {
+      if (!user) {
+        this.setState({ loggedIn: false, loaded: true });
+      } else {
+        this.setState({
+          loggedIn: true,
+          loaded: true,
+        });
+      }
+    });
+  }
+
+  render() {
+    const { loggedIn, loaded } = this.state;
+    const email = getAuth().currentUser?.email;
+    if (!loaded) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text>Loading</Text>
+        </View>
+      );
+    }
+
+    if (!loggedIn) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen
+              name="Landing"
+              component={Landing}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Register" component={Register} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Text>User is logged in with {email}</Text>
+      </View>
+    );
+  }
+}

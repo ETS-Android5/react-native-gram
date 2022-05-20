@@ -34,6 +34,28 @@ Run app on android
 npx react-native run-android
 ```
 
+## Troubleshooting
+
+To clear the watchman watches, use the following commands:
+
+```bash
+watchman watch-del-all
+```
+
+```bash
+rm -rf /tmp/metro-*
+```
+
+```bash
+npm cache clean --force
+```
+
+To clear node modules and reinstall:
+
+```bash
+rm -rf node_modules && yarn
+```
+
 ## References
 
 This app is based off the [YouTube guide](https://www.youtube.com/watch?v=1hPgQWbWmEk) from FreeCodeCamp. The GitHub repository can be found [here](https://github.com/SimCoderYoutube/InstagramClone).
